@@ -14,37 +14,44 @@ def apply_css():
     if CSS_FILE.exists():
         with open(CSS_FILE) as f:
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+    # Custom CSS to hide header and #MainMenu
+    custom_css = """
+        #MainMenu {visibility: hidden;}
+        header {visibility: hidden;}
+    """
+    st.markdown(f"<style>{custom_css}</style>", unsafe_allow_html=True)
 
 # Function to display lottie animation
 def load_lottie_animation(file_path):
-    if file_path.exists():
-        with open(file_path, "r") as f:
-            return json.load(f)
-    else:
-        st.warning("Lottie animation file not found.")
-        return None
+    with open(file_path, "r") as f:
+        return json.load(f)
 
-# Apply Snow Animation
+# Apply Effect for Snow Animation
 def run_snow_animation():
     rain(emoji="❄️", font_size=18, falling_speed=4, animation_length="infinite")
 
-# Function to get the name from query parameters
+# Function to get the name
 def getting_person_name():
-    query_params = st.query_params()  # Only use experimental if necessary
-    return query_params.get("name", ["Mate"])[0]
+    query_params = st.experimental_get_query_params()  # Using the experimental method for query params
+    return query_params.get("name", ["Mate"])[0]  # Default to 'Mate' if no name is passed
 
 # Page Configuration
 st.set_page_config(page_title="Happy Journey", page_icon="😍")
 
-# Run Snow Animation
+# Running the snow animation
 run_snow_animation()
 
-# Apply CSS
+# Applying CSS files and hiding elements
 apply_css()
 
 # Personalized name
 PERSON_NAME = getting_person_name()
 st.header(f"Happy Journey, {PERSON_NAME}! 🚗")
 st.markdown(f"Dear {PERSON_NAME}! I wish a great trip to you and your family.")
+
+# Load Lottie animation and display it
+lottie_animation = load_lottie_animation(LOTTIE_ANIMATION)
+st_lottie(lottie_animation, speed=1, width=700, height=400)
+
 
 

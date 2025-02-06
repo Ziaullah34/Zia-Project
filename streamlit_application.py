@@ -30,7 +30,7 @@ def run_snow_animation():
 
 # Function to get the name from query parameters
 def getting_person_name():
-    query_params = st.experimental_get_query_params()  # Only use experimental if necessary
+    query_params = st.query_params()  # Only use experimental if necessary
     return query_params.get("name", ["Mate"])[0]
 
 # Page Configuration

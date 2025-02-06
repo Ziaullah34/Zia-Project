@@ -17,31 +17,34 @@ def apply_css():
 
 # Function to display lottie animation
 def load_lottie_animation(file_path):
-    with open(file_path, "r") as f:
-        return json.load(f)
+    if file_path.exists():
+        with open(file_path, "r") as f:
+            return json.load(f)
+    else:
+        st.warning("Lottie animation file not found.")
+        return None
 
-# Apply Effect for Snow Animation
+# Apply Snow Animation
 def run_snow_animation():
     rain(emoji="❄️", font_size=18, falling_speed=4, animation_length="infinite")
 
-# Function to get the name
+# Function to get the name from query parameters
 def getting_person_name():
-    query_params = st.experimental_get_query_params()  # Corrected method
-    return query_params.get("name", ["Mate"])[0]  # Default to 'Mate' if no name is passed
+    query_params = st.experimental_get_query_params()  # Only use experimental if necessary
+    return query_params.get("name", ["Mate"])[0]
 
 # Page Configuration
 st.set_page_config(page_title="Happy Journey", page_icon="😍")
 
-# Running the snow animation
+# Run Snow Animation
 run_snow_animation()
 
-# Applying CSS files
+# Apply CSS
 apply_css()
 
 # Personalized name
 PERSON_NAME = getting_person_name()
 st.header(f"Happy Journey, {PERSON_NAME}! 🚗")
+st.markdown(f"Dear {PERSON_NAME}! I wish a great trip to you and your family.")
 
-# Load Lottie animation and display it
-lottie_animation = load_lottie_animation(LOTTIE_ANIMATION)
-st_lottie(lottie_animation, speed=1, width=700, height=400)
+

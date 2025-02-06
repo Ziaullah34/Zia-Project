@@ -4,12 +4,16 @@ import streamlit as st
 from streamlit_lottie import st_lottie
 from streamlit_extras.let_it_rain import rain
 
+# Directories and file paths
+BASE_DIR = Path(__file__).parent
+CSS_FILE = BASE_DIR / "style.css"
+LOTTIE_ANIMATION = BASE_DIR / "car_animation.json"
 
-# Directories and the file paths
-THIS_DIR = Path(__file__).parent
-CSS_FILE = THIS_DIR / "styles" / "style.css"
-ASSETS = THIS_DIR / "assets"
-LOTTIE_ANIMATION = ASSETS / "car_animation.json"
+# Apply CSS if the file exists
+def apply_css():
+    if CSS_FILE.exists():
+        with open(CSS_FILE) as f:
+            st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 # Function to display lottie animation
 def load_lottie_animation(file_path):
@@ -22,8 +26,8 @@ def run_snow_animation():
 
 # Function to get the name
 def getting_person_name():
-    query_params = st.experimental_get_query_params()
-    return query_params.get("name", ["Mate"])[0]
+    query_params = st.experimental_get_query_params()  # Corrected method
+    return query_params.get("name", ["Mate"])[0]  # Default to 'Mate' if no name is passed
 
 # Page Configuration
 st.set_page_config(page_title="Happy Journey", page_icon="😍")
@@ -32,16 +36,12 @@ st.set_page_config(page_title="Happy Journey", page_icon="😍")
 run_snow_animation()
 
 # Applying CSS files
-with open(CSS_FILE) as f:
-    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+apply_css()
 
 # Personalized name
 PERSON_NAME = getting_person_name()
 st.header(f"Happy Journey, {PERSON_NAME}! 🚗")
 
-# Displaying the animation
+# Load Lottie animation and display it
 lottie_animation = load_lottie_animation(LOTTIE_ANIMATION)
-st_lottie(lottie_animation, key="lottie-holiday", height=320)
-
-# Personal Message
-st.markdown(f"Dear {PERSON_NAME}! I wish a great trip to you and your family")
+st_lottie(lottie_animation, speed=1, width=700, height=400)
